@@ -8,16 +8,15 @@ import numpy as np
 
 
 
-def event(inputs, time_slot, load):
-        # [output, arr_time]
+def event(inputs, time_slot, load, iterations):
     n = len(inputs) #number of inputs 
     counter = 0
     packet_counter = 0
-    prob = ( load * n * 10 ) # 0,4  prob for each input to have a packet
+    prob = ( load * iterations ) # 0,4  prob for each input to have a packet
     for input in inputs:
-        b  = randint(0, n*10)
+        b  = randint(0, iterations)
         if b < prob:
-            out = randint(0,3)
+            out = randint(0, n-1)
             input.append([out, time_slot, counter])
             packet_counter = packet_counter + 1 
         counter = counter + 1 
@@ -59,8 +58,8 @@ def pim(inputs):
 
 
 def main (): 
-    iterations = 10**5
-    size = 2
+    iterations = 10**4
+    size = 4
     averages = []
     loads =  np.linspace(0,1,10, endpoint= False)
     for load in loads:
@@ -87,7 +86,7 @@ def simulation(iterations,load,size):
     total_delay = 0
     packet_counter = 0
     for i in range (iterations):
-        number_of_new_packets = event(inputs, time_slot, load)
+        number_of_new_packets = event(inputs, time_slot, load, iterations)
         packet_counter = packet_counter + number_of_new_packets
         departed_packets = pim(inputs)
         delay = 0 
@@ -103,9 +102,3 @@ def simulation(iterations,load,size):
 if __name__ == '__main__':
     main()
 
-
-
-'''         if time_slot % 1000000000 == 0:
-             print ("Total Delay: " + str(total_delay/packet_counter) + "  Time Slot: " + str(time_slot))
-             print("Departed Packets" + str(departed_packets))
-             print("~~~~~~~~~~~~~") '''
