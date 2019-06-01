@@ -5,7 +5,7 @@ from sys import exit
 from random import choice, sample,randint
 import matplotlib.pyplot as plt 
 import numpy as np
-
+import time
 
 
 def event(inputs, time_slot, load, iterations):
@@ -25,11 +25,14 @@ def event(inputs, time_slot, load, iterations):
 
 
 def pim(inputs):
-    
+    grants = []
+    requests = []
+    accepts = []
     while(1):
-        grants = [[], [], [], []] #map to inputs
-        requests = [[], [], [], []] #map to outputs
-        accepts = [[], [], [], []] #map to inputs
+        for i in range(len(inputs)):
+            grants.append([]) #inputs and their grants
+            requests.append([]) #outputs and their requests
+            accepts.append([]) #inputs and their accepted packets
         departed = []
         while(1):
             for input in inputs:			
@@ -50,7 +53,6 @@ def pim(inputs):
             
             for i in range(len(inputs)):
                 if inputs[i] != [] and accepts[i] != []:
-                    index = inputs[i].index(accepts[i][0])
                     inputs[i].remove(accepts[i][0])
                     departed.append(accepts[i][0])
             break
@@ -59,20 +61,25 @@ def pim(inputs):
 
 def main (): 
     iterations = 10**4
-    size = 4
+    size = 16
     averages = []
     loads =  np.linspace(0,1,10, endpoint= False)
+    start_time = time.time()
     for load in loads:
-        avg, time = simulation(iterations,load,size)
+        avg, final_time_slot = simulation(iterations,load,size)
         averages.append(avg)
 
+    finish_time = time.time()
+    run_time = finish_time - start_time
+    run_minutes, run_seconds = divmod(run_time, 60)
+    run_hours, run_minutes = divmod(run_minutes, 60)    
     print("~~~~~~~~~~~~~~~~~~~~")
     print ("Total Delay: " + str(avg) + "  Time Slot: " + str(iterations))
 
     plt.plot(loads, averages)
     plt.xlabel("network load")
     plt.ylabel("average packet delay")
-    title = "PIM simulation for various loads and " + str(iterations) + " time-slots"
+    title = f"PIM simulation | time slots: {iterations} | switch size: {size} | Runtime: {run_hours}h:{run_minutes}m:{run_seconds:.2f}s"
     filename = "simulations/time_" + str(iterations) + "-size_" + str(size)+ "-id_" + str(randint(0,1000000)) + ".png"
     plt.title(title)
     plt.savefig(filename)
