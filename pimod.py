@@ -60,8 +60,8 @@ def pim(inputs):
 
 
 def main (): 
-    iterations = 10**4
-    size = 16
+    iterations = 10**5
+    size = 8
     averages = []
     loads =  np.linspace(0,1,10, endpoint= False)
     start_time = time.time()
