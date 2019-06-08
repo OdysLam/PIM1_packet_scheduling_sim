@@ -60,8 +60,8 @@ def pim(inputs):
 
 
 def main (): 
-    iterations = 10**5
-    size = 8
+    iterations = 10**3
+    size = 16
     averages = []
     loads =  np.linspace(0,1,10, endpoint= False)
     start_time = time.time()
@@ -79,7 +79,7 @@ def main ():
     plt.plot(loads, averages)
     plt.xlabel("network load")
     plt.ylabel("average packet delay")
-    title = f"PIM simulation | time slots: {iterations} | switch size: {size} | Runtime: {run_hours}h:{run_minutes}m:{run_seconds:.2f}s"
+    title = f"PIM simulation | time slots: {iterations} | switch: {size} | Time: {run_hours}h:{run_minutes}m:{run_seconds:.2f}s"
     filename = "simulations/time_" + str(iterations) + "-size_" + str(size)+ "-id_" + str(randint(0,1000000)) + ".png"
     plt.title(title)
     plt.savefig(filename)
@@ -103,7 +103,8 @@ def simulation(iterations,load,size):
         time_slot = time_slot + 1 
         if packet_counter == 0:
             packet_counter = 1
-    average_delay = total_delay/packet_counter
+    average_delay = (total_delay/packet_counter)
+    print (f"total delay: {total_delay}, average delay: {average_delay}, packet counter: {packet_counter}")
     return average_delay, time_slot
 
 if __name__ == '__main__':
