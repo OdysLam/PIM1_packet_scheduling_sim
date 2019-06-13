@@ -104,7 +104,7 @@ def main ():
     iterations = 10**4
     size = 8
     averages = []
-    loads =  np.linspace(0,1,10, endpoint= False)
+    loads =  np.linspace(0,1,10, endpoint= False) #[0.1, 0.2, 0.3, ....1]
     start_time = time.time()
     for load in loads:
         avg, final_time_slot = simulation(iterations,load,size)
